@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Girlfriend?</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f2;
+            color: #ff0066;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20%;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px #ff99cc;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Will You Be My Girlfriend? 💖</h1>
+    <canvas id="flowerCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('flowerCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const flowers = [];
+        const flowerImage = new Image();
+        flowerImage.src = 'https://cdn-icons-png.flaticon.com/512/2917/2917995.png'; // Flower icon
+
+        class Flower {
+            constructor(x, y, size, speed) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.speed = speed;
+            }
+
+            draw() {
+                ctx.drawImage(flowerImage, this.x, this.y, this.size, this.size);
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.y = -this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        function createFlowers() {
+            for (let i = 0; i < 50; i++) {
+                const size = Math.random() * 30 + 20;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const speed = Math.random() * 2 + 1;
+                flowers.push(new Flower(x, y, size, speed));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            flowers.forEach(flower => {
+                flower.update();
+                flower.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        flowerImage.onload = () => {
+            createFlowers();
+            animate();
+        };
+    </script>
+</body>
+</html>
